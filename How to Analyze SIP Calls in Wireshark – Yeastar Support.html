@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<!-- saved from url=(0096)https://support.yeastar.com/hc/en-us/articles/360007606533-How-to-Analyze-SIP-Calls-in-Wireshark -->
+<html dir="ltr" lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <!-- v15546 -->
+
+  <title>How to Analyze SIP Calls in Wireshark – Yeastar Support</title>
+
+  <meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="w3gNsW0ZUjA9vcWkOmHXU8wpktMlpmjrlZoRcICvYluIDLSF9ZSe71cHBRJ3uevPtJD2fPNXMu6K5t+Myxj64g==">
+  <meta name="description" content="When we face a problem like a call failed or no audio in SIP, usually we need to get the PCAP dump file and check the packets. This..."><meta property="og:image" content="https://theme.zdassets.com/theme_assets/911659/921362880a4e3911e56d73cd37b257ece242a409.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Yeastar Support">
+<meta property="og:title" content="How to Analyze SIP Calls in Wireshark">
+<meta property="og:description" content=" 
+When we face a problem like a call failed or no audio in SIP, usually we need to get the PCAP dump file and check the packets. This article is about how to use Wireshark to analyze SIP calls.
+1. ...">
+<meta property="og:url" content="http://support.yeastar.com/hc/en-us/articles/360007606533-How-to-Analyze-SIP-Calls-in-Wireshark">
+<link rel="canonical" href="https://support.yeastar.com/hc/en-us/articles/360007606533-How-to-Analyze-SIP-Calls-in-Wireshark">
+<link rel="alternate" hreflang="en" href="https://support.yeastar.com/hc/en-us/articles/360007606533-How-to-Analyze-SIP-Calls-in-Wireshark">
+
+  <!-- Entypo pictograms by Daniel Bruce — www.entypo.com -->
+  <link rel="stylesheet" media="all" href="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/application-a02dee4125b91fec66c03c0a564857bf.css" id="stylesheet">
+  <link rel="stylesheet" type="text/css" href="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/style.css">
+
+  <link rel="shortcut icon" type="image/x-icon" href="https://theme.zdassets.com/theme_assets/911659/58c487fff797c51fb0a11fb85ec9384dbb18ccd7.ico">
+
+  <!--[if lt IE 9]>
+  <script>
+    //Enable HTML5 elements for <IE9
+    'abbr article aside audio bdi canvas data datalist details dialog \
+    figcaption figure footer header hgroup main mark meter nav output \
+    progress section summary template time video'.replace(/\w+/g,function(n){document.createElement(n)});
+  </script>
+<![endif]-->
+
+  <script async="" charset="utf-8" src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/saved_resource" type="text/javascript"></script><script async="" src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/analytics.js"></script><script src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/jquery-b60ddb79ff2563b75442a6bac88b00b5.js"></script>
+  <script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+ })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-736782-3', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+  <script type="text/javascript">
+  window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+  d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+  _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');
+  $.src='//v2.zopim.com/?3dLKJODOyz3cPCfhZj2PXaXWePLbVpla';z.t=+new Date;$.
+  type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');
+</script>
+
+  
+
+  <!-- add code here that should appear in the document head -->
+<meta name="description" content="You can request technical assistance by searching the knowledge base for information about your particular issues, asking the community for help, or opening a support ticket.">
+  <script type="text/javascript" src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/script.js"></script>
+<script src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/answerBot.js"></script><script type="text/javascript" charset="utf-8" async="" src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/VoteControls-56bc83f01bb6d24a161d589ca471a1e7.js"></script><script type="text/javascript" charset="utf-8" async="" src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/SubscriptionControls-f37bdc8c6d9e8814953b363b6d13acd4.js"></script><style media="print" class="jx_ui_StyleSheet" __jx__id="___$_2" type="text/css">.zopim { display: none !important }</style></head>
+<body class="community-enabled"><div class="zopim" __jx__id="___$_21 ___$_21" data-test-id="ChatWidgetButton" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; padding: 0px; border: 0px; background: transparent; overflow: hidden; position: fixed; z-index: 16000002; width: 187px; height: 30px; right: 10px; bottom: 0px;"><iframe frameborder="0" style="background-color: transparent; vertical-align: text-bottom; position: relative; width: 100%; height: 100%; min-width: 100%; min-height: 100%; max-width: 100%; max-height: 100%; margin: 0px; overflow: hidden; display: block;" src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/saved_resource.html" data-test-id="ChatWidgetButton-iframe"></iframe></div><div class="zopim" __jx__id="___$_4 ___$_4" data-test-id="ChatWidgetWindow" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; padding: 0px; border: 0px; background: transparent; overflow: hidden; position: fixed; z-index: 16000001; right: 10px; bottom: 0px; border-top-left-radius: 5px; border-top-right-radius: 5px; display: none; width: 240px; height: 200px; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 3px 2px;"><iframe frameborder="0" style="background-color: transparent; vertical-align: text-bottom; position: relative; width: 100%; height: 100%; min-width: 100%; min-height: 100%; max-width: 100%; max-height: 100%; margin: 0px; overflow: hidden; display: block;" src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/saved_resource(1).html" data-test-id="ChatWidgetWindow-iframe"></iframe></div>
+  
+  
+
+
+  
+
+
+  <header class="header">
+  <div class="header-menu">
+			<div class="logo">
+				<a href="https://www.yeastar.com/">
+				</a>
+			</div>
+			<div class="header-nav-menu">
+				<ul class="nav-menu-1">
+					<li>
+						<a>Products</a>
+						<ul class="nav-menu-2 nav-menu-product">
+							<li style="width:34%">
+								<a href="https://www.yeastar.com/voip-gateways/">Cloud PBX Platform</a>
+								<ul class="nav-menu-3">
+									<li><a href="https://www.yeastar.com/cloud-pbx/yeastar-management-plane/">Yeastar Management Plane (YMP)</a></li>
+									<li><a href="https://www.yeastar.com/cloud-pbx/reseller/">Multi-instance Cloud PBX</a></li>
+									<li><a href="https://www.yeastar.com/cloud-based-business-phone-system/">Hosted PBX &amp; VoIP</a></li>
+									<li><a href="https://www.yeastar.com/unified-communications/linkus-softphone/">Linkus UC Softphone</a></li>
+                  <li class="space-fill">.</li>
+          		    <li class="linkus-titile-ippbx"><a href="https://www.yeastar.com/unified-communications/linkus-softphone/">Unified Communications</a></li>
+          		    <li><a href="https://www.yeastar.com/linkus-softphone/desktop/">Linkus Desktop Softphone</a></li>
+                  <li><a href="https://www.yeastar.com/linkus-softphone/mobile/">Linkus Mobile Client</a></li>
+								</ul>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/s-series-voip-pbx/">VoIP PBX for SME</a>
+								<ul class="nav-menu-3">
+                  <li><a href="https://www.yeastar.com/s412-voip-pbx/">S412 VoIP PBX</a></li>
+									<li><a href="https://www.yeastar.com/s20-voip-pbx/">S20 VoIP PBX</a></li>
+									<li><a href="https://www.yeastar.com/s50-voip-pbx/">S50 VoIP PBX</a></li>
+									<li><a href="https://www.yeastar.com/s100-voip-pbx/">S100 VoIP PBX</a></li>
+									<li><a href="https://www.yeastar.com/s300-voip-pbx/">S300 VoIP PBX</a></li>
+									<li><a href="https://www.yeastar.com/unified-communications/linkus-softphone/">Linkus UC Softphone</a></li>
+								</ul>
+							</li>
+							<li style="width:33%">
+								<a href="https://www.yeastar.com/remote-management/">Value Added Service</a>
+								<ul class="nav-menu-3">
+									<li><a href="https://www.yeastar.com/remote-management/">Remote Management</a></li>
+                  <li><a href="https://www.yeastar.com/linkus-cloud-service/">Linkus Cloud Service for On-prem PBX</a></li>
+                  <li class="space-fill">.</li>
+          		    <li class="linkus-titile-ippbx"><a href="https://www.yeastar.com/voip-gateways/">VoIP Gateways</a></li>
+									<li><a href="https://www.yeastar.com/voip-gateways/">FXS/FXO/GSM/4G/ISDN to VoIP</a></li>
+                  <li class="space-fill">.</li>
+          		    <li class="linkus-titile-ippbx"><a href="https://www.yeastar.com/k2-large-capacity-ippbx-for-large-enterprises/">IPPBX for Large Enterprises</a></li>
+									<li><a href="https://www.yeastar.com/k2-large-capacity-ippbx-for-large-enterprises/">K2 VoIP PBX</a></li>
+               </ul>
+              </li>
+						</ul>
+					</li>
+					<li>
+						<a>Solutions</a>
+						<ul class="nav-menu-2 nav-menu-solution">
+							<li>
+								<a href="https://www.yeastar.com/voip-solutions-industry-verticals">By Industry</a>
+								<ul class="nav-menu-3">
+									<li><a href="https://www.yeastar.com/solution-schools-and-universities/">Education</a></li>
+									<li><a href="https://www.yeastar.com/solution-financial-companies/">Financial Companies</a></li>
+									<li><a href="https://www.yeastar.com/solution-government-agencies/">Government</a></li>
+									<li><a href="https://www.yeastar.com/solution-hospitality-industry/">Hospitality</a></li>
+									<li><a href="https://www.yeastar.com/solution-retail-industry/">Retail</a></li>
+									<li><a href="https://www.yeastar.com/solution-transportation-industry/">Transportation</a></li>
+								</ul>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/voip-solutions-ecosystem">By Ecosystem</a>
+								<ul class="nav-menu-3">
+									<li><a href="https://www.yeastar.com/compatible-sip-terminals">IP Phones</a></li>
+									<li><a href="https://www.yeastar.com/sip-paging-application/">Paging</a></li>
+									<li><a href="https://www.yeastar.com/integration-legacy-pbx">Existing PBX</a></li>
+									<li><a href="https://www.yeastar.com/voip-gateways-software-pbx/">Software PBX</a></li>
+									<li><a href="https://www.yeastar.com/cloud-call-center-integration">Cloud Call Center</a></li>
+									<li><a href="https://www.yeastar.com/crm-and-cti-integration/">CRM</a></li>
+									<li><a href="https://www.yeastar.com/hotel-pms-integration/">PMS</a></li>
+								</ul>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/voip-solutions-business-needs">By Business Needs</a>
+								<ul class="nav-menu-3">
+									<li><a href="https://www.yeastar.com/hosted-business-voice-solution/">Cloud Voice</a></li>
+									<li><a href="https://www.yeastar.com/remote-management/">Remote Management</a></li>
+									<li><a href="https://www.yeastar.com/economical-and-efficient-branch-office-solution">Branch Office</a></li>
+									<li><a href="https://www.yeastar.com/enterprise-mobility-solution">Mobility</a></li>
+									<li><a href="https://www.yeastar.com/sms-service-solutions">SMS Service</a></li>
+									<li><a href="https://www.yeastar.com/external-lines-ip-pbx/">Add External Lines</a></li>
+									<li><a href="https://www.yeastar.com/redundancy-solution">Redundancy Solution</a></li>
+									<li><a href="https://www.yeastar.com/solution-temporary-office/">Temporary Office</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a>Support</a>
+						<ul class="nav-menu-2 nav-menu-support">
+							<li>
+								<a>Resources</a>
+								<ul class="nav-menu-3">
+									<li><a href="https://www.yeastar.com/document-download/">Documents<span class="intro">User manuals, datasheet, etc.</span></a></li>
+									<li><a href="https://www.yeastar.com/firmware-download/">Firmware<span class="intro">Download the latest firmware.</span></a></li>
+									<li><a href="https://www.yeastar.com/s-series-faq/">FAQ<span class="intro">Frequently asked questions.</span></a></li>
+								</ul>
+							</li>
+							<li>
+								<a href="https://support.yeastar.com/hc/en-us">Support Portal</a>
+								<ul class="nav-menu-3">
+									<li><a href="https://support.yeastar.com/hc/en-us/community/topics">Community<span class="intro">Ask the community for help.</span></a></li>
+									<li><a href="https://support.yeastar.com/hc/en-us/categories/202596968-Knowledge-Base">Knowledge Base<span class="intro">Search for KB articles.</span></a></li>
+									<li><a href="https://support.yeastar.com/hc/en-us/requests/new">Submit a Ticket<span class="intro">Open a support ticket.</span></a></li>
+								</ul>
+							</li>
+							<li>
+								<a>Webinar<br><span class="intro" style="margin-top:13px;font-weight: normal;">Free online training on products and solutions.</span></a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a>Academy</a>
+      			<ul class="nav-menu-2 nav-menu-partners">
+							<li>
+								<a href="https://www.yeastar.com/academy/">About</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/academy/online-training-schedule">Online Training</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/academy/onsite-training-schedule">Onsite Training</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/academy/video-training-course">Self-Study</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/academy/training-partner-program/">Training Partner</a>
+							</li>
+              <li>
+								<a href="https://www.yeastar.com/academy/certification-verification/">Certificate Search</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a>Partners</a>
+						<ul class="nav-menu-2 nav-menu-partners">
+							<li>
+								<a href="https://www.yeastar.com/channel-program/">Become a Partner</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/become-hosting-partner/">Become a Hosting Partner</a>
+							</li>
+							<li>
+								<a href="https://partner.yeastar.com/">Partner Portal</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/find-a-partner/">Find a Partner</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/technology-partners">Technology Partner</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/itsp-partners">ITSP Partner</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a>Company</a>
+						<ul class="nav-menu-2 nav-menu-company">
+							<li style="width:61%;float:right">
+								<a href="https://www.yeastar.com/yeastar-launches-its-first-cloud-offering-yeastar-cloud-pbx/">
+									<img style="margin:12px 0px;" src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/Yeastar-Rank-Top-10.jpg">
+									<span class="cinfo">
+										News | Yeastar Ranked 
+										<br>
+										in Top 10 for 2017 SME
+										 <br>
+										 IPPBX Market (Global) -
+										 <br>
+										 April 4, 2018
+									</span>
+								</a>
+							</li>
+							<li>
+								<a>Corporate Info</a>
+								<ul class="nav-menu-3">
+									<li><a href="https://www.yeastar.com/about-us/">About Us</a></li>
+									<li><a href="https://www.yeastar.com/category/news/">Company News</a></li>
+									<li><a href="https://www.yeastar.com/category/blog/">Blog</a></li>
+									<li><a href="https://www.yeastar.com/contact/">Contact Us</a></li>
+								</ul>
+							</li>
+							<li>
+								<a>Events</a>
+								<ul class="nav-menu-3">
+									<li><a href="https://www.yeastar.com/exhibitions/">Exhibitions</a></li>
+									<li><a href="https://www.yeastar.com/partner-events/">Events</a></li>
+									<li><a href="https://www.yeastar.com/webinars/">Webinar</a></li>
+								</ul>
+							</li>
+							
+						</ul>
+					</li>
+          <li class="free-trial">
+            <a href="https://www.yeastar.com/cloud-pbx-free-trial/">Free Trial</a>
+          </li>
+					<li class="search-globlt">
+						<a class="searchIt" data-show="0"></a>
+					</li>
+					<li class="search-globlt">
+						<a class="globeIt" data-show="0"></a>
+						<ul class="nav-menu-global" style="display: none;">
+							<li>
+								<a href="http://www.yeastar.com/">English</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/es">Español</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/it">Italiano</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/de">Deutsch</a>
+							</li>
+							<li>
+								<a href="https://www.yeastar.com/pl">Polskie</a>
+							</li>
+							<li>
+								<a href="http://www.yeastar.cn/">简体中文</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+        	<div class="nav-menu-search" style="display: none;">
+							<input type="text" id="csearch" name="csearch" placeholder="Search">
+						</div>
+			</div>
+		</div>
+  <div class="header-inner">
+    <div class="logo">
+      <a title="Home" href="https://support.yeastar.com/hc/en-us">
+       Support Portal
+      </a>
+    </div>
+    <nav class="user-nav">
+      
+      
+      <a class="submit-a-request" href="https://support.yeastar.com/hc/en-us/requests/new">
+      Submit a ticket
+      </a>
+        <a class="login" data-auth-action="signin" role="button" href="https://support.yeastar.com/hc/en-us/signin?return_to=https%3A%2F%2Fsupport.yeastar.com%2Fhc%2Fen-us%2Farticles%2F360007606533-How-to-Analyze-SIP-Calls-in-Wireshark&amp;locale=en-us">Sign in</a>
+
+    </nav>
+  </div>
+</header>
+
+
+  <main role="main">
+    <nav class="sub-nav">
+  <ol class="breadcrumbs">
+  
+    <li title="Yeastar Support">
+      
+        <a href="https://support.yeastar.com/hc/en-us">Yeastar Support</a>
+      
+    </li>
+  
+    <li title="Troubleshooting">
+      
+        <a href="https://support.yeastar.com/hc/en-us/categories/360000719373-Troubleshooting">Troubleshooting</a>
+      
+    </li>
+  
+    <li title="Debug Tool">
+      
+        <a href="https://support.yeastar.com/hc/en-us/sections/360001615693-Debug-Tool">Debug Tool</a>
+      
+    </li>
+  
+</ol>
+
+  <form role="search" class="search" data-search="" action="https://support.yeastar.com/hc/en-us/search" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="✓"><input type="search" name="query" id="query" placeholder="Search" aria-label="Search">
+<input type="submit" name="commit" value="Search"></form>
+</nav>
+
+<article class="main-column">
+
+  <header class="article-header">
+    <h1>
+      
+      How to Analyze SIP Calls in Wireshark
+    </h1>
+    <div class="article-info">
+      <div class="article-avatar">
+       <a class="user-profile" href="https://support.yeastar.com/hc/en-us/profiles/362035420228-Eric-Jiang">
+  <img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/me.jpg" alt="Avatar">
+</a>
+      </div>
+      <div class="article-meta">
+        <strong class="article-author" title="Eric Jiang">
+         <a class="user-profile" href="https://support.yeastar.com/hc/en-us/profiles/362035420228-Eric-Jiang">
+  Eric Jiang
+</a>
+        </strong>
+        <div class="article-updated meta"><time datetime="2019-01-18T01:26:33Z" title="2019-01-18 09:26" data-datetime="calendar">January 18, 2019 09:26</time></div>
+      </div>
+      <div><a class="article-subscribe" title="Opens a sign-in dialog" rel="nofollow" role="button" data-auth-action="signin" aria-selected="false" href="https://support.yeastar.com/hc/en-us/articles/360007606533-How-to-Analyze-SIP-Calls-in-Wireshark/subscription">Follow</a></div>
+    </div>
+  </header>
+
+  <div class="content-body article-body">
+    <p>&nbsp;</p>
+<p>When we face a problem like a call failed or no audio in SIP, usually we need to get the PCAP dump file and check the packets. This article is about how to use Wireshark to analyze SIP calls.</p>
+<h3>1. Filter Expression of Wireshark</h3>
+<p>PCAP dump file contains all the protocols travel the network card, Wireshark has&nbsp;expressions to filter the packets so that can display the particular messages for the particular protocol. There is some common string list below:</p>
+<table>
+<tbody>
+<tr>
+<td><strong>Filter</strong></td>
+<td><strong>Description</strong></td>
+</tr>
+<tr>
+<td>sip</td>
+<td>filter SIP&nbsp;Protocol</td>
+</tr>
+<tr>
+<td>rtp</td>
+<td>filter RTP stream</td>
+</tr>
+<tr>
+<td>rtcp&nbsp;</td>
+<td>filter RTCP packets</td>
+</tr>
+<tr>
+<td>rtpevent</td>
+<td>filter DTMF packets</td>
+</tr>
+<tr>
+<td>ip.addr</td>
+<td>use IP address to filter packets, e.g. ip.addr==192.168.5.150 or ip.addr!=192.168.5.150</td>
+</tr>
+<tr>
+<td>udp.srcport</td>
+<td>filter packets depend on the UDP source port, e.g. udp.srcport==10000</td>
+</tr>
+<tr>
+<td>udp.dstport</td>
+<td>filter packets depend on the UDP destination port, e.g. udp.destport==20000 or udp.srcport==10000 ||&nbsp;udp.destport==20000</td>
+</tr>
+<tr>
+<td>dns&nbsp;</td>
+<td>filter DNS protocol</td>
+</tr>
+</tbody>
+</table>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip4.png" width="782" height="337"></p>
+<p>wireshark have plenty of filters for sip protocol</p>
+<p>most common use is sip.Method and sip.Call-ID.</p>
+<p>use sip method to filter sip messages: sip.Method == INVITE</p>
+<p>use call-id to filter one particular sip call: sip.Call-ID==20badbbf750c497a80d63ebb8a74a213</p>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip0.png" width="610" height="249"></p>
+<p>We can also filter with some special parameter in the packet through the option 'Prepare a Filter', select the parameter you want and click right click then you can see the menu display.</p>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip5.png" width="778" height="513"></p>
+<p>See more details about how to use Wireshark, please click&nbsp;<a href="https://wiki.wireshark.org/" target="_blank" rel="noopener">Wireshark Wiki.</a></p>
+<h2>2. SIP Call analysis&nbsp;</h2>
+<h3>1) List SIP calls</h3>
+<p>Use the menu entry 'Telephony &gt; VOIP Calls', then you can see the SIP call list.&nbsp;</p>
+<p>We can see the information below:</p>
+<ul>
+<li>The Start Time and Stop Time of each call.</li>
+<li>Initial Speaker is the IP Address of Caller.</li>
+<li>Caller ID and Callee ID in the From and To URI.</li>
+</ul>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip0(1).png" width="780" height="161"></p>
+<p>Select the calls you want to check, then we can see the invalid option Flow Sequence become available. Click the Flow Sequence button we can see the graph of this call with some details:</p>
+<ul>
+<li>SIP signaling flow between different UA.</li>
+<li>Direction, source and dest port of RTP stream.</li>
+<li>Codec of the RTP stream.</li>
+</ul>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip1.png" width="797" height="400"></p>
+<h3>2) Filter one SIP call</h3>
+<p>In SIP protocol, we can use call-id, from-tag, to-tag to identify a call. Usually, SIP entity will generate the random call-id string for each call, so we can mark one sip call with the call-id parameter.</p>
+<p>See the following figure about the SIP call filtered by Call-ID.</p>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip6.png" width="802" height="584"></p>
+<h3>3) SIP headers</h3>
+<p>Enable display raw for SIP message so that we don't need to expand every sip header or SDP parameters.</p>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip7.png" width="812" height="599"></p>
+<p>There are two parts in the sip INVITE request, SIP headers, and SDP.</p>
+<p>Just list some import sip headers here:</p>
+<ul>
+<li>From: Caller URI</li>
+<li>To:&nbsp;destination of the call</li>
+<li>Contact: the address for the subsequent request</li>
+</ul>
+<p>Also some import parameters in SDP:</p>
+<ul>
+<li>media line: m=audio 4000 RTP/AVP 123 8 0 101</li>
+<li>media direction: a=sendrecv</li>
+<li>codec:&nbsp;a=rtpmap:123 opus/48000/2</li>
+<li>ptime:&nbsp;a=ptime:20</li>
+</ul>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip8.png" width="809" height="709"></p>
+<h2>3. RTP analysis</h2>
+<p>&nbsp;When we have a voice issue, we could check the following problem with Wireshak:</p>
+<ul>
+<li>Is the RTP stream exist?&nbsp;</li>
+<li>Is the RTP stream send and receive on the right IP address and port?</li>
+<li>Is the RTP stream be decoded in the right codec?</li>
+<li>Is the RTP stream be sent with right ptime?</li>
+</ul>
+<h3>1) Filter RTP stream</h3>
+<ul>
+<li>Use 'rtp' as the expression to filter RTP packets.</li>
+<li>On the sip call flow&nbsp;graph, we can check RTP direction and codec.</li>
+<li>Use the menu 'Telephony &gt; RTP &gt; RTP Streams'.</li>
+</ul>
+<p>We can see all the RTP streams display and we can see some information of these RTP streams, like source port and dest port, SSRC, payload, max delta, lost percentage of the packets and jitter.</p>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip0(2).png" width="674" height="153"></p>
+<p>But how could we know which stream is the one we want to check?</p>
+<ul>
+<li>On the SIP call flow graph, we can see the source and dest port of one RTP stream</li>
+<li>The media line of the SDP message in INVITE or 200OK sip messages</li>
+</ul>
+<h3>2) Decode UDP packets to RTP</h3>
+<p>As we know RTP usually uses UDP transport, when the sip call flow in the PCAP file is incomplete the Wireshark may not parse the UDP packets to RTP streams. we can decode the UDP packets to RTP manually.</p>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip1(1).png" width="815" height="479"></p>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip3.png" width="528" height="241"></p>
+<h3>3) Play RTP stream</h3>
+<p>For now, Wireshark only supports playing&nbsp;pcmu and pcma codec.</p>
+<ul>
+<li>&nbsp;Select and Play Stream in the call list</li>
+</ul>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip4(1).png" width="689" height="141"></p>
+<p>&nbsp;</p>
+<ul>
+<li>Play one RTP stream, in the RTP Streams list, Analyze &gt; Play Streams</li>
+</ul>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip6(1).png" width="562" height="164"></p>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip7(1).png" width="672" height="408"></p>
+<p>We can see the RTP player after click the Play Streams button.</p>
+<p><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/mceclip5(1).png" width="779" height="325"></p>
+<p>&nbsp;</p>
+<p>About how to get PCAP file you can refer to the link: <a href="https://support.yeastar.com/hc/en-us/articles/360007739473-How-to-Get-PCAP-Dump-Capture" target="_blank" rel="noopener">How to Get PCAP Dump Capture</a></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+  </div>
+
+  <div class="article-attachments">
+    <ul class="attachments">
+      
+    </ul>
+  </div>
+
+  <footer class="article-footer">
+    
+      <div class="article-vote">
+        <span class="article-vote-question">Was this article helpful?</span>
+        <div class="article-vote-controls">
+          <a role="button" rel="nofollow" class="article-vote-up" title="Yes" aria-selected="false" href="https://support.yeastar.com/hc/en-us/articles/360007606533-How-to-Analyze-SIP-Calls-in-Wireshark#"></a>
+          <a role="button" rel="nofollow" class="article-vote-down" title="No" aria-selected="false" href="https://support.yeastar.com/hc/en-us/articles/360007606533-How-to-Analyze-SIP-Calls-in-Wireshark#"></a>
+        </div>
+        <small class="article-vote-count">
+          <span class="article-vote-label">7 out of 7 found this helpful</span>
+        </small>
+      </div>
+    
+    <ul class="share">
+  <li><a href="https://www.facebook.com/share.php?title=How+to+Analyze+SIP+Calls+in+Wireshark&amp;u=https%3A%2F%2Fsupport.yeastar.com%2Fhc%2Fen-us%2Farticles%2F360007606533-How-to-Analyze-SIP-Calls-in-Wireshark" class="share-facebook">Facebook</a></li>
+  <li><a href="https://twitter.com/share?lang=en&amp;text=How+to+Analyze+SIP+Calls+in+Wireshark&amp;url=https%3A%2F%2Fsupport.yeastar.com%2Fhc%2Fen-us%2Farticles%2F360007606533-How-to-Analyze-SIP-Calls-in-Wireshark" class="share-twitter">Twitter</a></li>
+  <li><a href="https://www.linkedin.com/shareArticle?mini=true&amp;source=Yeastar&amp;title=How+to+Analyze+SIP+Calls+in+Wireshark&amp;url=https%3A%2F%2Fsupport.yeastar.com%2Fhc%2Fen-us%2Farticles%2F360007606533-How-to-Analyze-SIP-Calls-in-Wireshark" class="share-linkedin">LinkedIn</a></li>
+  <li><a href="https://plus.google.com/share?hl=en-us&amp;url=https%3A%2F%2Fsupport.yeastar.com%2Fhc%2Fen-us%2Farticles%2F360007606533-How-to-Analyze-SIP-Calls-in-Wireshark" class="share-googleplus">Google+</a></li>
+</ul>
+
+  </footer>
+
+  <div class="article-more-questions">
+    Have more questions? <a href="https://support.yeastar.com/hc/en-us/requests/new">Submit a request</a>
+  </div>
+
+  <section class="article-comments">
+    <div class="comment-list-header">
+      <h4>0 Comments</h4>
+      <div class="comment-sorter">
+      
+      </div>
+    </div>
+    
+
+    
+
+    <div>Please <a data-auth-action="signin" href="https://support.yeastar.com/hc/en-us/signin?return_to=https%3A%2F%2Fsupport.yeastar.com%2Fhc%2Fen-us%2Farticles%2F360007606533-How-to-Analyze-SIP-Calls-in-Wireshark">sign in</a> to leave a comment.</div>
+
+    
+  </section>
+
+</article>
+
+<aside class="article-sidebar side-column">
+  
+  
+  <section class="related-articles">
+    <h3>Related articles</h3>
+    <ul>
+      
+        <li>
+          <a href="https://support.yeastar.com/hc/en-us/related/click?data=BAh7CjobZGVzdGluYXRpb25fYXJ0aWNsZV9pZGwrCFEoItJTADoYcmVmZXJyZXJfYXJ0aWNsZV9pZGwrCAUhINJTADoLbG9jYWxlSSIKZW4tdXMGOgZFVDoIdXJsSSJBL2hjL2VuLXVzL2FydGljbGVzLzM2MDAwNzczOTQ3My1Ib3ctdG8tR2V0LVBDQVAtRHVtcC1DYXB0dXJlBjsIVDoJcmFua2kG--32c159045544c950afa7910f7969eb027d4e5fd3" rel="nofollow">How to Get PCAP Dump Capture</a>
+        </li>
+      
+        <li>
+          <a href="https://support.yeastar.com/hc/en-us/related/click?data=BAh7CjobZGVzdGluYXRpb25fYXJ0aWNsZV9pZGkEE2n2DDoYcmVmZXJyZXJfYXJ0aWNsZV9pZGwrCAUhINJTADoLbG9jYWxlSSIKZW4tdXMGOgZFVDoIdXJsSSI2L2hjL2VuLXVzL2FydGljbGVzLzIxNzQ3NTM0Ny1Ib3ctdG8tVXNlLVdpcmVzaGFyawY7CFQ6CXJhbmtpBw%3D%3D--02cf7cd99e6e630e6dd1c6c6e180af175708d0e8" rel="nofollow">How to Use Wireshark</a>
+        </li>
+      
+        <li>
+          <a href="https://support.yeastar.com/hc/en-us/related/click?data=BAh7CjobZGVzdGluYXRpb25fYXJ0aWNsZV9pZGwrCBX7U9JTADoYcmVmZXJyZXJfYXJ0aWNsZV9pZGwrCAUhINJTADoLbG9jYWxlSSIKZW4tdXMGOgZFVDoIdXJsSSJRL2hjL2VuLXVzL2FydGljbGVzLzM2MDAxMTAwNDY5My1Db21tb24tQ2F1c2VzLWZvci1TSVAtT3V0Ym91bmQtQ2FsbC1GYWlsdXJlcwY7CFQ6CXJhbmtpCA%3D%3D--9702bb62921ed9be7b056d3aa3689e4ac44a98ab" rel="nofollow">Common Causes for SIP Outbound Call Failures</a>
+        </li>
+      
+        <li>
+          <a href="https://support.yeastar.com/hc/en-us/related/click?data=BAh7CjobZGVzdGluYXRpb25fYXJ0aWNsZV9pZGwrCJHxItJTADoYcmVmZXJyZXJfYXJ0aWNsZV9pZGwrCAUhINJTADoLbG9jYWxlSSIKZW4tdXMGOgZFVDoIdXJsSSI9L2hjL2VuLXVzL2FydGljbGVzLzM2MDAwNzc5MDk5My1EVE1GLVJlY29nbml0aW9uLUZhaWx1cmUGOwhUOglyYW5raQk%3D--676d14b7e990da2940929c3c3fa17e56ca73f2f2" rel="nofollow">DTMF Recognition Failure</a>
+        </li>
+      
+        <li>
+          <a href="https://support.yeastar.com/hc/en-us/related/click?data=BAh7CjobZGVzdGluYXRpb25fYXJ0aWNsZV9pZGwrCAlENdJTADoYcmVmZXJyZXJfYXJ0aWNsZV9pZGwrCAUhINJTADoLbG9jYWxlSSIKZW4tdXMGOgZFVDoIdXJsSSJML2hjL2VuLXVzL2FydGljbGVzLzM2MDAwODk5MTc1My1TSVAtRXh0ZW5zaW9uLVJlZ2lzdHJhdGlvbi1JbnRyb2R1Y3Rpb24GOwhUOglyYW5raQo%3D--01e38620b941eaade0c56b891e5f3ae8ea58b3e3" rel="nofollow">SIP Extension Registration Introduction</a>
+        </li>
+      
+    </ul>
+  </section>
+
+
+  <a href="https://www.yeastar.com/linkus-cloud-service?utm_source=support-portal&amp;utm_medium=article-banner&amp;utm_content=lcs"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/d703ade0ce1ce2d4cc8656cf7c214c126cb31760.gif"></a>
+  
+</aside>
+
+  </main>
+
+  <footer class="footer">
+  <div class="footer-inner">
+        <div class="footer-content">
+            <div class="content-area">
+                <div class="footer-left">
+                        <div class="followlink">
+                            <a href="https://twitter.com/yeastar" target="blank" class="linkblock"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/eb59354cec4a92335a4422c793250c8e0e719547.png"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/5f5bcd9dad16bceacb52a28e8dbb71d5a40b416d.png"></a>
+                            <a href="https://www.facebook.com/yeastar" target="blank" class="linkblock"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/127bb9d2bef42714f974f94ad5df18f97e7c8885.png"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/acf8b503e2263ccfa78697cb3ad7aafd76bb097b.png"></a>
+                            <a href="https://www.linkedin.com/company/Yeastar" target="blank" class="linkblock"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/7f7f53a17d1f539cad972a75d44c6cf5ce912d82.png"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/f0084b5569295f27f9917072468a892174144ece.png"></a>
+                            <a href="https://www.youtube.com/YeastarVideo" target="blank" class="linkblock"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/90b984ac26d7e2807f94de533f5445b47fe63914.png"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/352d97a7a34d0527d9d4271f6c4068988627c0a9.png"></a>
+                            <a href="https://www.xing.com/companies/yeastar" target="blank" class="linkblock"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/5926ffe360418ba9a2d83ee6f1c713b8c1e799f5.png"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/f43a21c138f7dfd2bcc8f6253ed4da242ada57d1.png"></a>
+                            <a href="https://www.yeastar.com/subscribe" target="blank" class="linkblock"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/511af72f02745c1b8b6d0097530c4066b6347296.png"><img src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/f2812fad0106574d391a5804713715fb871f3720.png"></a>
+                        </div>
+                </div>
+                <div class="footer-right">
+                    <div class="right-content">
+                        <div class="contacts-nav"><a href="https://www.yeastar.com/contact/">Contacts</a> | <a href="https://www.yeastar.com/legal/">Terms of Use</a> | <a href="https://www.yeastar.com/privacy/">Privacy Policy</a> | <a href="https://www.yeastar.com/cookie-policy/">Cookie Policy</a></div>
+                    </div>
+                </div>
+                <div class="clear-float"></div>
+            </div>
+        </div>
+  </div>
+</footer>
+
+
+
+  <!-- / -->
+
+  <script type="text/javascript" src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/en-us-79ffb202529a74f6d4487bb0a40a70a1.js"></script>
+  <script src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/host.js" data-brand-id="820148" data-return-to="https://support.yeastar.com/hc/en-us/articles/360007606533-How-to-Analyze-SIP-Calls-in-Wireshark" data-theme="hc" data-locale="en-us" data-auth-origin="820148,true,true"></script>
+  
+
+  <script type="text/javascript">
+  /*
+
+    Greetings sourcecode lurker!
+
+    This is for internal Zendesk and legacy usage,
+    we don't support or guarantee any of these values
+    so please don't build stuff on top of them.
+
+  */
+
+  HelpCenter = {};
+  HelpCenter.account = {"subdomain":"yeastar","environment":"production","name":"Yeastar"};
+  HelpCenter.user = {"identifier":"da39a3ee5e6b4b0d3255bfef95601890afd80709","email":null,"name":null,"role":"anonymous","avatar_url":"https://assets.zendesk.com/hc/assets/default_avatar.png","is_admin":false,"organizations":[],"groups":[]};
+  HelpCenter.internal = {"asset_url":"//static.zdassets.com/hc/assets/","web_widget_asset_composer_url":"https://static.zdassets.com/ekr/snippet.js","current_session":{"locale":"en-us","csrf_token":"h2c6sCkhvqkVtCTF75xj9IsL7U7i3hu4nAVTUzxAPtfME4OEsaxydn8O5HOiRF9o87KJ4TQvQb2DeZ2vd/embg==","shared_csrf_token":null},"settings":{"zopim_enabled":true,"spam_filter_enabled":true},"current_record_id":"360007606533","current_record_url":"/hc/en-us/articles/360007606533-How-to-Analyze-SIP-Calls-in-Wireshark","current_record_title":"How to Analyze SIP Calls in Wireshark","search_results_count":null,"current_text_direction":"ltr","current_brand_url":"https://yeastar.zendesk.com","current_host_mapping":"support.yeastar.com","current_path":"/hc/en-us/articles/360007606533-How-to-Analyze-SIP-Calls-in-Wireshark","authentication_domain":"https://yeastar.zendesk.com","show_autocomplete_breadcrumbs":true,"rollbar_config":{"enabled":true,"endpoint":"https://rollbar-us.zendesk.com/api/1/item/","accessToken":"731a5a953e9a4b7ab6cac9623f50c732","captureUncaught":true,"captureUnhandledRejections":true,"payload":{"environment":"production","client":{"javascript":{"source_map_enabled":true,"code_version":"4dfedf030a9eb1771ab943ca867e73751978ec89","guess_uncaught_frames":true}}}},"user_info_changing_enabled":false,"has_user_profiles_enabled":true,"has_anonymous_kb_voting":true,"has_professional_upsell":false,"has_multi_language_help_center":true,"mobile_device":false,"mobile_site_enabled":true,"show_at_mentions":false,"has_copied_content":false,"embeddables_config":{"embeddables_web_widget":false,"embeddables_connect_ipms":false},"base_domain":"zendesk.com","answer_bot_subdomain":"static","plans_url":"https://support.yeastar.com/hc/admin/plan?locale=en-us","manage_content_url":"https://support.yeastar.com/hc/en-us","arrange_content_url":"https://support.yeastar.com/hc/admin/arrange_contents?locale=en-us","general_settings_url":"https://support.yeastar.com/hc/admin/general_settings?locale=en-us","user_segments_url":"https://yeastar.zendesk.com/knowledge/user_segments?brand_id=820148","import_articles_url":"https://support.yeastar.com/hc/admin/import_articles?locale=en-us","has_community_enabled":true,"has_internal_sections":true,"has_answer_bot_web_form_enabled":false,"billing_url":"/access/return_to?return_to=https://yeastar.zendesk.com/agent/admin/subscription","has_answer_bot":true,"has_block_answer_bot_embeddable":false,"answer_bot_management_url":"https://support.yeastar.com/hc/admin/answer_bot?locale=en-us","is_account_owner":false,"has_theming_templates":true,"theming_center_url":"https://support.yeastar.com/theming","theming_cookie_key":"hc-da39a3ee5e6b4b0d3255bfef95601890afd80709-preview","is_preview":false,"has_guide_user_segments_search":true,"has_alternate_templates":false,"has_guide_arrange_articles":true,"arrange_articles_url":"https://yeastar.zendesk.com/knowledge/arrange?brand_id=820148","article_verification_url":"https://yeastar.zendesk.com/knowledge/verification?brand_id=820148","has_article_verification":false,"has_guide_language_settings":false,"guide_language_settings_url":"https://support.yeastar.com/hc/admin/language_settings?locale=en-us","has_requests_filter_cleanup":true};
+</script>
+
+  <script src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/hc_enduser-f5bfb1852b1b7d1b8370988be7efb279.js"></script>
+
+  <script type="text/javascript">
+    (function() {
+  var Tracker = {};
+
+  Tracker.track = function(eventName, data) {
+    var url = "https://support.yeastar.com/hc/tracking/events?locale=en-us";
+
+    var payload = {
+      "event": eventName,
+      "data": data,
+      "referrer": document.referrer
+    };
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+    xhr.send(JSON.stringify(payload));
+  };
+
+    Tracker.track("article_viewed", "BAh7CDoLbG9jYWxlSSIKZW4tdXMGOgZFVDoPYXJ0aWNsZV9pZGwrCAUhINJTADoKX21ldGF7CzoPYWNjb3VudF9pZGkDK+kNOhNoZWxwX2NlbnRlcl9pZGkEEPjuCzoNYnJhbmRfaWRpA7SDDDoMdXNlcl9pZDA6DnVzZXJfcm9sZUkiDmFub255bW91cwY7BlQ7AEkiCmVuLXVzBjsGVA==--7d7ab7b7e36f2b8ec560deb2cd3b9d07eabd5e62");
+})();
+
+  </script>
+
+<div><iframe data-reactroot="" id="automaticAnswers" class="zEWidget-automaticAnswers" tabindex="-1" style="border: none; background: transparent; transform: translateZ(0px); position: fixed; opacity: 0; bottom: 0px; margin: 0px 6px 6px 0px; z-index: 2147483647; right: 0px; height: 188px; width: 410px; transition-property: none; transition-timing-function: unset; top: -9999px;" src="./How to Analyze SIP Calls in Wireshark – Yeastar Support_files/saved_resource(2).html"></iframe></div></body></html>
